@@ -211,12 +211,13 @@
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
       var rowsCopy = this.rows();
       var diag = [];
-      for (var i =0; i<rowsCopy.length; i++){
-          console.log('diagonal', rowsCopy[i][minorDiagonalColumnIndexAtFirstRow-i]);
-        if ((minorDiagonalColumnIndexAtFirstRow-i)<(rowsCopy.length)){
-          diag.push(rowsCopy[i][minorDiagonalColumnIndexAtFirstRow-i]);
+
+      for (var i=0; i<rowsCopy.length; i++) {
+        if (rowsCopy[i][minorDiagonalColumnIndexAtFirstRow - i] !== undefined){
+          diag.push(rowsCopy[i][minorDiagonalColumnIndexAtFirstRow - i]);
         }
       }
+
       console.log(diag);
       var counter = 0;
       for (var i=0; i< diag.length; i++){
@@ -231,9 +232,11 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      var rowsCopy = this.rows();
-      for (var i=0; i<rowsCopy[0].length; i++){
-        if (this.hasMinorDiagonalConflictAt(rowsCopy[0][i])){
+      var rowsCopy = this.rows().slice();
+      var firstRow = rowsCopy[0];
+      for (var i = (firstRow.length - 1); i >= 0; i--){
+        console.log("hey", firstRow, i);
+        if (this.hasMinorDiagonalConflictAt(firstRow[i])){
           return true;
         }
       }
