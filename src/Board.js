@@ -85,7 +85,6 @@
       //compare each bit the simple way
       var counter = 0;
       for (var i=0; i< rowsCopy.length; i++){
-        console.log('in the loop ', counter, rowsCopy[i])
         counter = counter + rowsCopy[i];
       }
       if (counter<=1){
@@ -99,7 +98,6 @@
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
       var rowsCopy = this.rows()
-      console.log(rowsCopy);
       var hasConflict = false;
       for (var i = 0; i<rowsCopy.length; i++){
         if (!hasConflict){
@@ -137,13 +135,11 @@
       var rowsCopy = this.rows()
       var collumns = [];
       for (var i =0; i<rowsCopy.length; i++){
-        //var snglCol = [];
         collumns.push(rowsCopy[i][colIndex])
       }
 
       var counter = 0;
       for (var i=0; i< collumns.length; i++){
-        console.log('in the loop ', counter, collumns[i])
         counter = counter + collumns[i];
       }
       if (counter<=1){
@@ -177,17 +173,15 @@
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
       var rowsCopy = this.rows();
       var diag = [];
-      console.log(rowsCopy[0][majorDiagonalColumnIndexAtFirstRow]);
       for (var i =0; i<rowsCopy.length; i++){
           console.log('diagonal', rowsCopy[i][majorDiagonalColumnIndexAtFirstRow+i]);
-        if ((i+majorDiagonalColumnIndexAtFirstRow)>(rowsCopy.length)){
+        if ((i+majorDiagonalColumnIndexAtFirstRow)<(rowsCopy.length)){
           diag.push(rowsCopy[i][majorDiagonalColumnIndexAtFirstRow+i]);
         }
       }
       console.log(diag);
       var counter = 0;
       for (var i=0; i< diag.length; i++){
-        console.log('in the DIAGONAL loop ', counter, diag[i])
         counter = counter + diag[i];
       }
       if (counter<=1){
@@ -199,7 +193,13 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var rowsCopy = this.rows();
+      for (var i=0; i<rowsCopy[0].length; i++){
+        if (this.hasMajorDiagonalConflictAt(rowsCopy[0][i])){
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -209,12 +209,35 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var rowsCopy = this.rows();
+      var diag = [];
+      for (var i =0; i<rowsCopy.length; i++){
+          console.log('diagonal', rowsCopy[i][minorDiagonalColumnIndexAtFirstRow-i]);
+        if ((minorDiagonalColumnIndexAtFirstRow-i)<(rowsCopy.length)){
+          diag.push(rowsCopy[i][minorDiagonalColumnIndexAtFirstRow-i]);
+        }
+      }
+      console.log(diag);
+      var counter = 0;
+      for (var i=0; i< diag.length; i++){
+        counter = counter + diag[i];
+      }
+      if (counter<=1){
+        return false;
+      } else {
+        return true;
+      }
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var rowsCopy = this.rows();
+      for (var i=0; i<rowsCopy[0].length; i++){
+        if (this.hasMinorDiagonalConflictAt(rowsCopy[0][i])){
+          return true;
+        }
+      }
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
