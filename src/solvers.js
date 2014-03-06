@@ -17,6 +17,7 @@ window.printBoard = function (board){
     console.log(board[i]+"\n");
   }
 };
+
 window.getSpace = function (board, row, col){
   return board[row][col];
 };
@@ -108,46 +109,85 @@ window.findNRooksSolution = function(n) {
 
 };
 
+window.countNobles= function(board){
+  var total = 0;
+  for (var row = 0; row<board.length; row++){
+    for (var col = 0; col < board.length; col ++){
+      if (board[row][col] === "R" || board[row][col] === "Q" ){
+        total++;
+      }
+    }
+  }
+  return total;
+};
+
+window.findRookConfigs = function(board, count){
+  board = window.placeRook(board);
+  for (var row = 0; row<board.length; row++){
+    for (var col = 0; col < board.length; col ++){
+      if (window.countNobles(board) === board.length){
+        count++;
+      }
+      if (board[row][col] === "0"){
+        count = count + window.findRookConfigs(board);
+      }
+    }
+  }
+  return count;
+};
+
 window.placeRook = function (board){
   for (var row=0; row< board.length; row++){
     for(var col = 0; col<board.length; col ++){
-      if (window.hasRookConflict(board, row, col) === false){
+      if (window.hasRookConflict(board, row, col) === false && board[row][col]==="0"){
         window.setRook(board, row, col);
       }
     }
   }
+  return board;
 };
 
 window.makeMarkedBoard = function (board){
-  for (var i=0; i< board.length; i++){
-    for (var j =0; j<board.length; j++){
-      if (board[i][j] === "R" || board[i][j]==="Q"){
-        board[i][j] = "X";
+  for (var row=0; row< board.length; row++){
+    for (var col =0; col<board.length; col++){
+      if (board[row][col] === "R" || board[row][col]==="Q"){
+        board[row][col] = "X";
       } else {
-        board[i][j] = "0";
+        board[row][col] = "0";
       }
     }
   }
+  return board;
 };
-
+window.findSolution = function (board){
+  var numberToFind = board.length;
+  for (var i = 0; i<numberToFind; i++) {
+    window.placeRook(board);
+  }
+  return board;
+};
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var board = [];
-
+  var results = 0;
   var rooksPlaced = 0;
 
   var totalRooks = 0;
 
   var board = window.makeBoard(n);
-  while (totalRooks<n){
-    window.placeRook(board);
-    totalRooks += 1;
+  for (var row =0; row <n; row ++){
+    for (var col = 0; col < n; col ++){
+      window.placeRook(board);
+    }
   }
+  if (hasRookConflict)
+  window.placeRook(board);
+  totalRooks += 1;
 
 
 
 
-  return board;
+
+  return results;
 
 };
 
