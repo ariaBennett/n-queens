@@ -218,7 +218,7 @@
         }
       }
 
-      console.log(diag);
+      console.log('DIAG!!!  ',diag);
       var counter = 0;
       for (var i=0; i< diag.length; i++){
         counter = counter + diag[i];
@@ -233,11 +233,12 @@
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
       var rowsCopy = this.rows().slice();
-      var firstRow = rowsCopy[0];
-      for (var i = (firstRow.length - 1); i >= 0; i--){
-        console.log("hey", firstRow, i);
-        if (this.hasMinorDiagonalConflictAt(firstRow[i])){
-          return true;
+      for (var i = (rowsCopy.length-1); i >= 0; i--){
+        //iterate through all rows
+        for (var j = (rowsCopy.length-1); j>=0; j--){
+          if (this.hasMinorDiagonalConflictAt(i+j)){
+            return true;
+          }
         }
       }
       return false;
