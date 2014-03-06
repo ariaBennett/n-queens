@@ -90,7 +90,6 @@ window.findNRooksSolution = function(n) {
 
 
   var board = window.makeBoard(n);
-  var freeSpace = n*n;
   var totalRooks = 0;
 
 
@@ -109,14 +108,47 @@ window.findNRooksSolution = function(n) {
 
 };
 
+window.placeRook = function (board){
+  for (var row=0; row< board.length; row++){
+    for(var col = 0; col<board.length; col ++){
+      if (window.hasRookConflict(board, row, col) === false){
+        window.setRook(board, row, col);
+      }
+    }
+  }
+};
 
+window.makeMarkedBoard = function (board){
+  for (var i=0; i< board.length; i++){
+    for (var j =0; j<board.length; j++){
+      if (board[i][j] === "R" || board[i][j]==="Q"){
+        board[i][j] = "X";
+      } else {
+        board[i][j] = "0";
+      }
+    }
+  }
+};
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var board = [];
 
- // console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solutionCount;
+  var rooksPlaced = 0;
+
+  var totalRooks = 0;
+
+  var board = window.makeBoard(n);
+  while (totalRooks<n){
+    window.placeRook(board);
+    totalRooks += 1;
+  }
+
+
+
+
+  return board;
+
 };
 
 
