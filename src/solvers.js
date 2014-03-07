@@ -109,7 +109,7 @@ window.findNRooksSolution = function(n) {
 
 };
 
-window.countNobles= function(board){
+window.countNobles = function(board){
   var total = 0;
   for (var row = 0; row<board.length; row++){
     for (var col = 0; col < board.length; col ++){
@@ -122,13 +122,17 @@ window.countNobles= function(board){
 };
 
 window.findRookConfigs = function(board, count){
-  board = window.placeRook(board);
+  var tryPlace = function(board){
+  
+  }
   for (var row = 0; row<board.length; row++){
     for (var col = 0; col < board.length; col ++){
       if (window.countNobles(board) === board.length){
         count++;
       }
       if (board[row][col] === "0"){
+        console.log(window.printBoard(board));
+        board = window.setRook(board, row, col);
         count = count + window.findRookConfigs(board);
       }
     }
@@ -137,10 +141,12 @@ window.findRookConfigs = function(board, count){
 };
 
 window.placeRook = function (board){
-  for (var row=0; row< board.length; row++){
-    for(var col = 0; col<board.length; col ++){
-      if (window.hasRookConflict(board, row, col) === false && board[row][col]==="0"){
+  var foundOne = false;
+  for (var row=0; row < board.length; row++){
+    for(var col = 0; col < board.length; col ++){
+      if (foundOne === false && window.hasRookConflict(board, row, col) === false && board[row][col]==="0"){
         window.setRook(board, row, col);
+        foundOne = true;
       }
     }
   }
@@ -151,8 +157,8 @@ window.makeMarkedBoard = function (board){
   for (var row=0; row< board.length; row++){
     for (var col =0; col<board.length; col++){
       if (board[row][col] === "R" || board[row][col]==="Q"){
-        board[row][col] = "X";
-      } else {
+        board[row][col] = "T";
+      } else if (board[row][col] === "X") {
         board[row][col] = "0";
       }
     }
@@ -170,25 +176,19 @@ window.findSolution = function (board){
 window.countNRooksSolutions = function(n) {
   var results = 0;
   var rooksPlaced = 0;
-
   var totalRooks = 0;
-
   var board = window.makeBoard(n);
+
   for (var row =0; row <n; row ++){
     for (var col = 0; col < n; col ++){
       window.placeRook(board);
     }
   }
+
   if (hasRookConflict)
   window.placeRook(board);
   totalRooks += 1;
-
-
-
-
-
   return results;
-
 };
 
 
