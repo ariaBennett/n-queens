@@ -189,18 +189,55 @@ window.findSolution = function (board){
 window.countNRooksSolutions = function(n) {
   var total = 0;
   var board = window.makeBoard(n);
+  
+  var tryPlay = function(board, count){
+    for (var row=0; row< board.length; row++){
+      for (var col =0; col<board.length; col++){
+        if (board[row][col] === "0") {
+          var newBoard = window.makeSemiCompleteBoard(n, count, 1);
+          window.setRook(newBoard, row, col);
+          count++;
+          if (window.countNobles(newBoard) === n) {
+            total++;
+          }
+          else {
+            tryPlay(newBoard, count);
+          }
+        }
+      }
+    }
+  };
 
+  var markCount = 0;
   for (var row=0; row< board.length; row++){
     for (var col =0; col<board.length; col++){
-      var newBoard = [];
-      $.extend(true, newBoard, board);
+      var newBoard = window.makeSemiCompleteBoard(n, markCount, 1);
       window.setRook(newBoard, row, col);
-      console.log(printBoard(newBoard));
+      markCount++;
+      tryPlay(newBoard, markCount);
     }
   }
-
-
+  if (n === 1) {
+    total = 1;
+  }
   return total;
+};
+window.makeSemiCompleteBoard = function(n, row, col){
+  var grid = [];
+  var squaresToMark = row * col;
+  for (var i=0; i<n; i++){
+    grid.push([]);
+    for (var j = 0; j< n; j++){
+      if (squaresToMark > 0) {
+        grid[i].push('X');
+        squaresToMark--;
+      }
+      else {
+        grid[i].push('0');
+      }
+    }
+  }
+  return grid;
 };
 
 
