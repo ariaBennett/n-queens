@@ -85,28 +85,29 @@ window.makeBoard = function(n){
   return grid;
 };
 
-window.findNRooksSolution = function(n) {
-  var solution = []; //fixme
-  var rooksPlaced = 0;
-
-
-  var board = window.makeBoard(n);
-  var totalRooks = 0;
-
-
-  for (var row=0; row< n; row++){
-    for(var col = 0; col<n; col ++){
-      if (totalRooks < n && window.hasRookConflict(board, row, col) === false){
-        window.setRook(board, row, col);
-        totalRooks += 1;
+window.convertBoardToNumeric = function(board) {
+  for (var row=0; row < board.length; row++){
+    for(var col = 0; col < board.length; col ++){
+      if (board[row][col] === "Q" || board[row][col] === "R") {
+        board[row][col] = 1;
+      }
+      else {
+        board[row][col] = 0;
       }
     }
   }
-
   return board;
-
- // console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-
+};
+window.findNRooksSolution = function(n) {
+  var board = makeBoard(n);
+  for (var row=0; row < board.length; row++){
+    for(var col = 0; col < board.length; col ++){
+      if (window.hasRookConflict(board, row, col) === false && board[row][col]==="0"){
+        window.setRook(board, row, col);
+      }
+    }
+  }
+  return window.convertBoardToNumeric(board);
 };
 
 window.countNobles = function(board){
@@ -121,19 +122,31 @@ window.countNobles = function(board){
   return total;
 };
 
-window.findRookConfigs = function(board, count){
-  var tryPlace = function(board){
-  
+window.hasEmptySpace = function(board){
+  for (var row = 0; row<board.length; row++){
+    for (var col = 0; col < board.length; col ++){
+      if (board[row][col] === "0"){
+        return true;
+      }
+    }
   }
+  return false;
+};
+window.findRookConfigs = function(board, count){
   for (var row = 0; row<board.length; row++){
     for (var col = 0; col < board.length; col ++){
       if (window.countNobles(board) === board.length){
         count++;
+        board = window.makeMarkedBoard(board);
+        console.log(printBoard(board));
+        window.findRookConfigs(board, count);
       }
       if (board[row][col] === "0"){
-        console.log(window.printBoard(board));
         board = window.setRook(board, row, col);
         count = count + window.findRookConfigs(board);
+      }
+      else if (!window.hasEmptySpace(board)){
+        board = window.makeMarkedBoard(board);
       }
     }
   }
@@ -174,21 +187,30 @@ window.findSolution = function (board){
 };
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var results = 0;
-  var rooksPlaced = 0;
-  var totalRooks = 0;
   var board = window.makeBoard(n);
-
-  for (var row =0; row <n; row ++){
-    for (var col = 0; col < n; col ++){
-      window.placeRook(board);
+  var doRookPlacement = function(oldBoard, row, col) {
+    var newBoard = oldBoard.slice();
+    window.setRook(newBoard, row, col);
+    console.log(printBoard(newBoard));
+    searchForViableSpace(newBoard);
+  }
+  var searchForViableSpace = function(board) {
+    for (var row=0; row< board.length; row++){
+      for (var col =0; col<board.length; col++){
+        if (board[row][col] === "0") {
+          doRookPlacement(board, row, col);
+        }
+      }
     }
   }
-
-  if (hasRookConflict)
-  window.placeRook(board);
-  totalRooks += 1;
-  return results;
+  for (var row=0; row< board.length; row++){
+    for (var col =0; col<board.length; col++){
+      var newBoard = board.slice();
+      doRookPlacement(newBoard, row, col);
+    }
+  }
+  console.log(printBoard(board));
+  return 0;
 };
 
 
